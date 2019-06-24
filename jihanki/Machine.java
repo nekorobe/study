@@ -2,10 +2,11 @@ package jihanki;
 
 /*
  * VenderMachine
+ * 
  */
 
 class Machine {
-	private static int drinkCount = 0;
+	private static int itemCount = 0;
 	private int id;
 	private String name;
 	private int price;
@@ -13,8 +14,8 @@ class Machine {
 
 	// コンストラクタ
 	Machine(String name, int price, int stock) {
-		drinkCount ++;
-		this.id = drinkCount;
+		itemCount ++;
+		this.id = itemCount;
 		this.name = name;
 		this.price = price;
 		this.stock = stock;

@@ -10,12 +10,13 @@ import java.util.Scanner;
  */
 
 public class Main {
-	
+
 	public static void main(String[] args) {
 
 		Scanner scan = new Scanner(System.in);
 		int money = 0;
-		// ドリンクリストの作成 ※追加した際、switch文も変える必要あり　改善案を模索中
+		// ドリンクリストの作成 ※追加した際、switch文も変える必要あり 改善案を模索中
+		// Machine drink[n] = new Machine("商品名", "価格", "在庫数");
 		Machine drink1 = new Machine("コーヒー", 100, 10);
 		Machine drink2 = new Machine("お茶", 120, 10);
 		Machine drink3 = new Machine("ジュース", 150, 10);
@@ -24,7 +25,7 @@ public class Main {
 		while (true) {
 			try {
 				System.out.println("お金を入れてください");
-				String input = scan.next(); // val1に数字入力の受付
+				String input = scan.next();
 				money = Integer.parseInt(input);
 
 				if (money % 10 == 0) {
@@ -32,14 +33,14 @@ public class Main {
 				} else {
 					System.out.println("※お金は10円単位で入れてください");
 				}
-			} catch (Exception e) { // 数値以外の入力をはじく
+			} catch (Exception e) {
 				System.out.println("半角数字でない値が入力されています");
 				System.out.println("再度、数字を入力してください");
 			}
 		}
 
 		System.out.println("商品番号を選んでください");
-		// 商品の一覧表示（美しくないので自動生成できるように改善したい）
+		// 商品の一覧表示（美しくないので自動生成できるようにしたい）
 		System.out.println(drink1.getId() + " " + drink1.getName() + " " + drink1.getPrice() + "円");
 		System.out.println(drink2.getId() + " " + drink2.getName() + " " + drink2.getPrice() + "円");
 		System.out.println(drink3.getId() + " " + drink3.getName() + " " + drink3.getPrice() + "円");
