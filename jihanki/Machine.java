@@ -5,18 +5,19 @@ package jihanki;
  */
 
 class Machine {
+	private static int drinkCount = 0;
 	private int id;
 	private String name;
 	private int price;
-	private int stock;
+	private int stock;// ※現在未使用
 
 	// コンストラクタ
-	Machine(int id, String name, int price, int stock) {
-		this.id = id;
+	Machine(String name, int price, int stock) {
+		drinkCount ++;
+		this.id = drinkCount;
 		this.name = name;
 		this.price = price;
 		this.stock = stock;
-		Main.drinkCount = +1;
 	}
 
 	public int getId() {
@@ -38,7 +39,7 @@ class Machine {
 		int count50;
 		int count10;
 		int otsuriSum;
-		
+
 		if ((this.stock > 0) && (money > this.price)) {
 			money = money - this.price;
 			otsuriSum = money;
@@ -47,13 +48,13 @@ class Machine {
 
 			// つり銭の枚数計算（ArrayListできれいにまとめられそう）
 			count500 = money / 500;
-			money = Math.max(money - (count500 * 500), 0);
+			money %= 500;
 			count100 = money / 100;
-			money = Math.max(money - (count100 * 100), 0);
+			money %= 100;
 			count50 = money / 50;
-			money = Math.max(money - (count50 * 50), 0);
+			money %= 50;
 			count10 = money / 10;
-			money = Math.max(money - (count10 * 10), 0);
+			money %= 10;
 
 			System.out.println("おつりの合計は" + otsuriSum + "円で、");
 			System.out.println("500円玉：" + count500 + "枚");
@@ -63,7 +64,7 @@ class Machine {
 			System.out.println("です。ご利用ありがとうございました。");
 
 		} else if (stock <= 0) {
-			System.out.println("申し訳ありません、現在品切れです。"); // 連続購入が出来るようになったら在庫管理を実装予定
+			System.out.println("申し訳ありません、現在品切れです。"); // ※現在未使用（連続購入が出来るようになったら在庫管理を実装予定）
 
 		} else {
 			System.out.println("金額が足りませんでした。" + money + "円を返却します。");

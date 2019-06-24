@@ -10,16 +10,15 @@ import java.util.Scanner;
  */
 
 public class Main {
-	public static int drinkCount = 0;
-
+	
 	public static void main(String[] args) {
 
 		Scanner scan = new Scanner(System.in);
 		int money = 0;
-		// ドリンクリストの作成 ※追加した際、switch文も変える必要あり
-		Machine drink1 = new Machine(1, "コーヒー", 100, 10);
-		Machine drink2 = new Machine(2, "お茶", 120, 10);
-		Machine drink3 = new Machine(3, "ジュース", 150, 10);
+		// ドリンクリストの作成 ※追加した際、switch文も変える必要あり　改善案を模索中
+		Machine drink1 = new Machine("コーヒー", 100, 10);
+		Machine drink2 = new Machine("お茶", 120, 10);
+		Machine drink3 = new Machine("ジュース", 150, 10);
 
 		// お金を入れる
 		while (true) {
