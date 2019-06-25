@@ -15,16 +15,27 @@ public class Main {
 
 		Scanner scan = new Scanner(System.in);
 		int money = 0;
-		// ドリンクリストの作成 ※追加した際、switch文も変える必要あり 改善案を模索中
+		// ドリンクリストの作成 ※追加した際、switch文も変える必要があるため改善案を模索中
 		// Machine drink[n] = new Machine("商品名", "価格", "在庫数");
 		Machine drink1 = new Machine("コーヒー", 100, 10);
 		Machine drink2 = new Machine("お茶", 120, 10);
 		Machine drink3 = new Machine("ジュース", 150, 10);
 
+		System.out.println("いらっしゃいませ");
+		System.out.println("こちらのお飲み物からお選びいただけます");
+		
+		// 商品の一覧表示（美しくないので自動生成できるようにしたい）
+/*		for(int i = 0; i > Machine.getItemCount(); i++){
+			System.out.println(Machine.getItemList(i).printData());
+		}*/
+		System.out.println(drink1.printData());
+		System.out.println(drink2.printData());
+		System.out.println(drink3.printData());
+		
 		// お金を入れる
 		while (true) {
 			try {
-				System.out.println("お金を入れてください");
+				System.out.println("いくらお金を入れますか？");
 				String input = scan.next();
 				money = Integer.parseInt(input);
 
@@ -39,13 +50,9 @@ public class Main {
 			}
 		}
 
-		System.out.println("商品番号を選んでください");
-		// 商品の一覧表示（美しくないので自動生成できるようにしたい）
-		System.out.println(drink1.getId() + " " + drink1.getName() + " " + drink1.getPrice() + "円");
-		System.out.println(drink2.getId() + " " + drink2.getName() + " " + drink2.getPrice() + "円");
-		System.out.println(drink3.getId() + " " + drink3.getName() + " " + drink3.getPrice() + "円");
 
 		// 商品選択（ここも自動生成できそう）
+		System.out.println("商品番号を選んでください");
 		while (true) {
 			int buttonNom = scan.nextInt();
 
@@ -63,5 +70,7 @@ public class Main {
 				System.out.println("※商品番号が間違っています。もう一度選んでください。");
 			}
 		}
+		//　当たりくじの処理を入れたい
+
 	}
 }

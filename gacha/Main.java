@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 /*
- * @TODO　実装予定　：　ピックアップガチャ　List改善　BOXガチャの打ち止め処理　10連ボーナス（SR確定）　IDによるデータ紐付け
+ * @TODO　実装予定　：　ピックアップガチャ　List改善　10連ボーナス（SR確定）　ID管理による他データとの関連付け
  */
 public class Main {
 
@@ -15,18 +15,18 @@ public class Main {
 
 	public static void main(String[] args) {
 
-	// config---------------------------------------//
-		// 確率設定
-		final double ssrProb = 0.01;
-		final double srProb = 0.1;
+		// config---------------------------------------//
+		// 確率設定（通常ガチャ）
+		final double ssrProb = 0.01; // SSRの確立
+		final double srProb = 0.1; // SRの確立
 
-		// 引く回数
+		// 一度に引く回数
 		final int n = 10;
 
 		// ガチャ種別
-		// 1：BOXガチャ 2:通常ガチャ
-		final int gachaType = 2;
-	// ---------------------------------------------//
+		// 1：BOXガチャ　2:通常ガチャ
+		final int gachaType = 1;
+		// ---------------------------------------------//
 
 		// メインシーケンス
 
@@ -47,21 +47,26 @@ public class Main {
 	}
 
 	public static void boxGacha(int n) {
-		for (int i = 0; i < n; i++) {
-			System.out.println(list.getBOX(rnd.nextInt(list.getLengthBOX())));
+		System.out.println(Math.min(n, list.getSizeBOX()) +"回抽選します");
+		for (int i = 0; i < Math.min(n, list.getSizeBOX()); i++) {
+			System.out.println(list.getBOX(rnd.nextInt(list.getSizeBOX())));
 		}
-		System.out.println("あと" + list.getLengthBOX() + "枚です");
+		if (list.getSizeBOX() < 0) {
+			System.out.println("BOXが空になったので終了します");
+		} else {
+			System.out.println("あと" + list.getSizeBOX() + "枚です");
+		}
 	}
 
 	public static void nomalGacha(int n, double ssrProb, double srProb) {
 		for (int i = 0; i < n; i++) {
 			gacha = rnd.nextDouble();
 			if (gacha < ssrProb) {
-				System.out.print("SSレア！" + list.getSSR(rnd.nextInt(list.getLengthSSR())) + " ");
+				System.out.print("SSレア！" + list.getSSR(rnd.nextInt(list.getSizeSSR())) + " ");
 			} else if (gacha < srProb) {
-				System.out.print("Sレア！" + list.getSR(rnd.nextInt(list.getLengthSR())) + " ");
+				System.out.print("Sレア！" + list.getSR(rnd.nextInt(list.getSizeSR())) + " ");
 			} else {
-				System.out.print("レア！" + list.getR(rnd.nextInt(list.getLengthR())) + " ");
+				System.out.print("レア！" + list.getR(rnd.nextInt(list.getSizeR())) + " ");
 			}
 			System.out.println(gacha);
 		}

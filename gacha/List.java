@@ -9,7 +9,7 @@ public class List {
 	ArrayList<String> rList = new ArrayList<String>();
 	ArrayList<String> boxList = new ArrayList<String>();
 
-	List() { // 動作テスト用で手打ちのためfor文に修正予定　ListではなくMap型を試してもいいかも（ID:名前）
+	List() { // 動作テスト用で手打ちのためfor文に修正予定 ListではなくMap型も検討（ID:名前）
 		// SSRリスト
 		ssrList.add("5000");
 		ssrList.add("5001");
@@ -34,6 +34,7 @@ public class List {
 		rList.add("3008");
 		rList.add("3009");
 
+		///////////////////////////////////////////////////////
 		// BOXリスト
 		boxList.add("5000 SSR!!");
 		boxList.add("5001 SSR!!");
@@ -46,7 +47,7 @@ public class List {
 		boxList.add("4004 SR!");
 		boxList.add("4005 SR!");
 		boxList.add("4006 SR!");
-		
+
 		boxList.add("3000");
 		boxList.add("3001");
 		boxList.add("3002");
@@ -154,7 +155,7 @@ public class List {
 		return result;
 	}
 
-	public int getLengthSSR() {
+	public int getSizeSSR() {
 		return ssrList.size();
 	}
 
@@ -163,7 +164,7 @@ public class List {
 		return result;
 	}
 
-	public int getLengthSR() {
+	public int getSizeSR() {
 		return srList.size();
 	}
 
@@ -172,7 +173,7 @@ public class List {
 		return result;
 	}
 
-	public int getLengthR() {
+	public int getSizeR() {
 		return rList.size();
 	}
 
@@ -182,7 +183,7 @@ public class List {
 		return result;
 	}
 
-	public int getLengthBOX() {
+	public int getSizeBOX() {
 		return boxList.size();
 	}
 
