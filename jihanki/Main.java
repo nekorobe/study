@@ -17,10 +17,13 @@ public class Main {
 		int money = 0;
 		// ドリンクリストの作成 ※追加した際、switch文も変える必要があるため改善案を模索中
 		// Machine drink[n] = new Machine("商品名", "価格", "在庫数");
+	
 		Machine drink1 = new Machine("コーヒー", 100, 10);
 		Machine drink2 = new Machine("お茶", 120, 10);
 		Machine drink3 = new Machine("ジュース", 150, 10);
-
+		//Machine[3] = new Machine[];
+		//
+		
 		System.out.println("いらっしゃいませ");
 		System.out.println("こちらのお飲み物からお選びいただけます");
 		
