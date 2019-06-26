@@ -4,16 +4,17 @@ import java.util.Scanner;
 
 /*
  * 自販機プログラム
- * @TODO 連続購入の実装、在庫管理、
  * @TODO 管理者モードの実装（在庫補充、商品追加など）
  * @TODO コインの枚数管理を行い、つり銭切れ機能の実装
+ * @TODO 最後に買った商品の一覧出力をする
  */
 
 public class Main {
 
 	public static void main(String[] args) {
-
+		Scanner scan = new Scanner(System.in);
 		int money = 0;
+
 		// ドリンクリストの作成
 		Machine[] drinks = new Machine[3];
 		drinks[0] = new Machine("コーヒー", 100, 10);
@@ -21,23 +22,34 @@ public class Main {
 		drinks[2] = new Machine("ジュース", 150, 10);
 		// drinks[n] = new Machine("商品名", "価格", "在庫数");
 
+		/////////////////////////////////////////////////////////////
+
+		// 商品の一覧表示
 
 		System.out.println("いらっしゃいませ");
 		System.out.println("こちらのお飲み物からお選びいただけます");
 
-		// 商品の一覧表示
-		for (int i = 0; i < Machine.getItemCount(); i++) {
-			System.out.println(drinks[i].printData());
-		}
+		printDrink(drinks);
 
 		// お金を入れる
 		money = insertCoin(money);
 
-		// 商品選択
-		choice(money, drinks);
+		while (true) {
+			// 商品選択
+			money = choice(money, drinks);
 
-		// 当たりくじの処理を入れたい
+			// 続けて購入？
+			conte(money);
+		}
+	}
 
+	///////////////////////////////////////////////////////////////
+
+	// 商品一覧表示
+	public static void printDrink(Machine drinks[]) {
+		for (int i = 0; i < Machine.getItemCount(); i++) {
+			System.out.println(drinks[i].printData());
+		}
 	}
 
 	// お金を入れる
@@ -62,17 +74,68 @@ public class Main {
 		return money;
 	}
 
-	// 商品選択
-	public static void choice(int money, Machine drinks[]) {
+	// 商品選択＆購入処理
+	public static int choice(int money, Machine drinks[]) {
 		Scanner scan = new Scanner(System.in);
-		System.out.println("商品番号を選んでください");
+		System.out.println("商品番号を入力してください");
 		while (true) {
 			int buttonNom = scan.nextInt();
-			if (buttonNom < drinks.length) {
-				drinks[buttonNom - 1].buy(money);
-				System.exit(0);
+			if (buttonNom <= drinks.length) {
+				if ((drinks[buttonNom - 1].getStock() > 0) && (money > drinks[buttonNom - 1].getPrice())) {
+					money = drinks[buttonNom - 1].buy(money);
+					lots(drinks);
+					break;
+				} else if (drinks[buttonNom - 1].getStock() <= 0) {
+					System.out.println("申し訳ありません、現在品切れです。");
+					break;
+				} else {
+					System.out.println("※金額が足りません。購入できませんでした。");
+					break;
+				}
 			} else {
 				System.out.println("※商品番号が間違っています。もう一度選んでください。");
+			}
+		}
+		System.out.println("残りの金額は" + money + "円です");
+		return money;
+	}
+
+	public static void conte(int money) {
+		Scanner scan = new Scanner(System.in);
+		while (true) {
+			System.out.println("続けて購入しますか？");
+			System.out.println("1:はい　2：いいえ");
+			int select = scan.nextInt();
+
+			if (select == 1) {
+				break;
+			} else if (select == 2) {
+				Machine.getOtsuri(money);
+				System.exit(0);
+			} else {
+				System.out.println("※1か2で入力してください");
+			}
+		}
+	}
+
+	// 当たりくじの処理
+	public static void lots(Machine drinks[]) {
+		Scanner scan = new Scanner(System.in);
+
+		if (Machine.lots()) {
+			System.out.println("（商品番号を入力してください）");
+			while (true) {
+				int buttonNom = scan.nextInt();
+				if (buttonNom <= drinks.length) {
+					if (drinks[buttonNom - 1].getStock() > 0) {
+						drinks[buttonNom - 1].lucky();
+						break;
+					} else {
+						System.out.println("※その商品は在庫切れです。別の商品を選んでください。");
+					}
+				} else {
+					System.out.println("※商品番号が間違っています。もう一度選んでください。");
+				}
 			}
 		}
 	}

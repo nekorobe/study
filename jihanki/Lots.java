@@ -5,6 +5,9 @@ import java.util.Random;
 public class Lots {
 
 	public static void main(String[] args) {
+	}
+	public static void lots(){
+		
 		Random rnd = new Random();
 		String[] head = new String[10];
 		String[] foot = new String[10];
