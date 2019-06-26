@@ -13,26 +13,33 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		Scanner scan = new Scanner(System.in);
 		int money = 0;
 		// ドリンクリストの作成 ※追加した際、switch文も変える必要があるため改善案を模索中
 		// Machine drink[n] = new Machine("商品名", "価格", "在庫数");
-		Machine drink1 = new Machine("コーヒー", 100, 10);
-		Machine drink2 = new Machine("お茶", 120, 10);
-		Machine drink3 = new Machine("ジュース", 150, 10);
+		Machine[] drinks = new Machine[3];
+		drinks[0] = new Machine("コーヒー", 100, 10);
+		drinks[1] = new Machine("お茶", 120, 10);
+		drinks[2] = new Machine("ジュース", 150, 10);
 
 		System.out.println("いらっしゃいませ");
 		System.out.println("こちらのお飲み物からお選びいただけます");
-		
+
 		// 商品の一覧表示（美しくないので自動生成できるようにしたい）
-/*		for(int i = 0; i > Machine.getItemCount(); i++){
-			System.out.println(Machine.getItemList(i).printData());
-		}*/
-		System.out.println(drink1.printData());
-		System.out.println(drink2.printData());
-		System.out.println(drink3.printData());
-		
+		for (int i = 0; i < Machine.getItemCount(); i++) {
+			System.out.println(drinks[i].printData());
+		}
+
 		// お金を入れる
+		money = insertCoin(money);
+
+		// 商品選択
+		choice(money, drinks);
+		// 当たりくじの処理を入れたい
+
+	}
+
+	public static int insertCoin(int money) {
+		Scanner scan = new Scanner(System.in);
 		while (true) {
 			try {
 				System.out.println("いくらお金を入れますか？");
@@ -49,28 +56,21 @@ public class Main {
 				System.out.println("再度、数字を入力してください");
 			}
 		}
+		return money;
+	}
 
-
-		// 商品選択（ここも自動生成できそう）
+	public static void choice(int money, Machine drinks[]) {
+		Scanner scan = new Scanner(System.in);
 		System.out.println("商品番号を選んでください");
 		while (true) {
 			int buttonNom = scan.nextInt();
-
-			switch (buttonNom) {
-			case 1:
-				drink1.buy(money);
+			if (buttonNom < drinks.length) {
+				drinks[buttonNom - 1].buy(money);
 				System.exit(0);
-			case 2:
-				drink2.buy(money);
-				System.exit(0);
-			case 3:
-				drink3.buy(money);
-				System.exit(0);
-			default:
+			} else {
 				System.out.println("※商品番号が間違っています。もう一度選んでください。");
 			}
-		}
-		//　当たりくじの処理を入れたい
 
+		}
 	}
 }
