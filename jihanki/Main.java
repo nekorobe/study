@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 /*
  * 自販機プログラム
- * @TODO 連続購入の実装、在庫管理、リスト形式を使用した方がスマートかどうかの検討
+ * @TODO 連続購入の実装、在庫管理、
  * @TODO 管理者モードの実装（在庫補充、商品追加など）
  * @TODO コインの枚数管理を行い、つり銭切れ機能の実装
  */
@@ -14,17 +14,18 @@ public class Main {
 	public static void main(String[] args) {
 
 		int money = 0;
-		// ドリンクリストの作成 ※追加した際、switch文も変える必要があるため改善案を模索中
-		// Machine drink[n] = new Machine("商品名", "価格", "在庫数");
+		// ドリンクリストの作成
 		Machine[] drinks = new Machine[3];
 		drinks[0] = new Machine("コーヒー", 100, 10);
 		drinks[1] = new Machine("お茶", 120, 10);
 		drinks[2] = new Machine("ジュース", 150, 10);
+		// drinks[n] = new Machine("商品名", "価格", "在庫数");
+
 
 		System.out.println("いらっしゃいませ");
 		System.out.println("こちらのお飲み物からお選びいただけます");
 
-		// 商品の一覧表示（美しくないので自動生成できるようにしたい）
+		// 商品の一覧表示
 		for (int i = 0; i < Machine.getItemCount(); i++) {
 			System.out.println(drinks[i].printData());
 		}
@@ -34,10 +35,12 @@ public class Main {
 
 		// 商品選択
 		choice(money, drinks);
+
 		// 当たりくじの処理を入れたい
 
 	}
 
+	// お金を入れる
 	public static int insertCoin(int money) {
 		Scanner scan = new Scanner(System.in);
 		while (true) {
@@ -59,6 +62,7 @@ public class Main {
 		return money;
 	}
 
+	// 商品選択
 	public static void choice(int money, Machine drinks[]) {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("商品番号を選んでください");
@@ -70,7 +74,6 @@ public class Main {
 			} else {
 				System.out.println("※商品番号が間違っています。もう一度選んでください。");
 			}
-
 		}
 	}
 }
