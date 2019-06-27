@@ -13,7 +13,7 @@ class Machine {
 	private String name;
 	private int price;
 	private int stock;
-	//private static ArrayList<String> itemList = new ArrayList<String>();
+	// private static ArrayList<String> itemList = new ArrayList<String>();
 
 	// コンストラクタ
 	Machine(String name, int price, int stock) {
@@ -22,7 +22,7 @@ class Machine {
 		this.name = name;
 		this.price = price;
 		this.stock = stock;
-		//itemList.add(this.name);
+		// itemList.add(this.name);
 	}
 
 	public int getId() {
@@ -41,9 +41,9 @@ class Machine {
 		return itemCount;
 	}
 
-/*	public static String getItemList(int id) {
-		return itemList.get(id);
-	}*/
+	/*
+	 * public static String getItemList(int id) { return itemList.get(id); }
+	 */
 
 	public int getStock() {
 		return this.stock;
@@ -56,18 +56,9 @@ class Machine {
 
 	// 購入処理
 	public int buy(int money) {
-		if ((this.stock > 0) && (money > this.price)) {
-			money = money - this.price;
-			this.stock -= 1;
-
-			System.out.println(this.name + "を購入しました。");
-
-		} else if (stock <= 0) {
-			System.out.println("申し訳ありません、現在品切れです。");
-
-		} else {
-			System.out.println("金額が足りませんでした。" + money + "円を返却します。");
-		}
+		money = money - this.price;
+		this.stock -= 1;
+		System.out.println(this.name + "を購入しました");
 		return money;
 	}
 
@@ -99,13 +90,13 @@ class Machine {
 		count10 = otsuri / 10;
 		otsuri %= 10;
 
-		System.out.println("おつりの合計は" + money + "円で、");
+		System.out.println(money + "円のお返しで、");
 		System.out.println("500円玉：" + count500 + "枚");
 		System.out.println("100円玉：" + count100 + "枚");
 		System.out.println("50円玉　：" + count50 + "枚");
 		System.out.println("10円玉　：" + count10 + "枚");
 		System.out.println("です。ご利用ありがとうございました。");
-
+		System.exit(0);
 	}
 
 	// 当たりくじ
@@ -126,8 +117,11 @@ class Machine {
 
 		if (Integer.parseInt(lots) % 1111 == 0) {
 			System.out.println("大当たり！もう一本選んでネ！");
+			System.out.println("");
 			return true;
 		} else {
+			System.out.println("残念、ハズレです。また買ってね！");
+			System.out.println("");
 			return false;
 		}
 	}
