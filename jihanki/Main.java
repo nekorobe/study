@@ -6,7 +6,7 @@ import java.util.Scanner;
  * 自販機プログラム
  * @TODO 管理者モードの実装（在庫補充、商品追加など）
  * @TODO コードをループするようにする
- * @TODO コインの枚数管理を行い、つり銭切れ機能の実装
+ * @TODO 投入金額のコイン識別方法の検討（コイン毎の入力にする？）
  * @TODO 最後に買った商品の一覧出力をする、まとめ買い機能
  */
 
@@ -25,30 +25,33 @@ public class Main {
 
 		/////////////////////////////////////////////////////////////
 
-		// 商品の一覧表示
-
-		System.out.println("いらっしゃいませ");
-		System.out.println("こちらのお飲み物からお選びいただけます");
-
-		printDrink(drinks);
-
-		// お金を入れる
-		money = insertCoin(money);
-
 		while (true) {
-			// 商品選択
-			money = choice(money, drinks);
+			// 商品の一覧表示
+			System.out.println("いらっしゃいませ！");
+			System.out.println("こちらのお飲み物からお選びいただけます");
+			printDrink(drinks);
 
-			// 金額が足りない場合自動で終了
-			if (money < getMinPrice(drinks)) {
-				Machine.getOtsuri(money);
+			// お金を入れる
+			money = insertCoin(money);
 
+			while (true) {
+				// 商品選択
+				money = choice(money, drinks);
+
+				// 金額が足りない場合自動で終了
+				if (money < getMinPrice(drinks)) {
+					Machine.getOtsuri(money);
+					break;
+
+				} else {
+					// 続けて購入？
+					if (!conte(money)) {
+						break;
+					}
+				}
 			}
-			// 続けて購入？
-			conte(money);
 		}
 	}
-
 	///////////////////////////////////////////////////////////////
 
 	// 商品一覧表示
@@ -68,6 +71,7 @@ public class Main {
 				money = Integer.parseInt(input);
 
 				if (money % 10 == 0) {
+					System.out.println(money + "円を入れました。");
 					break;
 				} else {
 					System.out.println("※お金は10円単位で入れてください");
@@ -89,7 +93,7 @@ public class Main {
 			if (nom <= drinks.length) {
 				if ((drinks[nom - 1].getStock() > 0) && (money >= drinks[nom - 1].getPrice())) {
 					money = drinks[nom - 1].buy(money);
-					lots(drinks);
+					lot(drinks);
 					break;
 				} else if (drinks[nom - 1].getStock() <= 0) {
 					System.out.println("申し訳ありません、現在品切れです。");
@@ -106,7 +110,8 @@ public class Main {
 		return money;
 	}
 
-	public static void conte(int money) {
+	// 購入を継続するかどうか
+	public static boolean conte(int money) {
 		Scanner scan = new Scanner(System.in);
 		while (true) {
 			System.out.println("続けて購入しますか？");
@@ -114,9 +119,10 @@ public class Main {
 			int select = scan.nextInt();
 
 			if (select == 1) {
-				break;
+				return true;
 			} else if (select == 2) {
 				Machine.getOtsuri(money);
+				return false;
 			} else {
 				System.out.println("※1か2で入力してください");
 			}
@@ -135,7 +141,6 @@ public class Main {
 
 	// 商品の内最小の金額を返す
 	public static int getMinPrice(Machine drinks[]) {
-
 		int min = getMaxPrice(drinks);
 		for (int i = 0; i < drinks.length; i++) {
 			min = Math.min(min, drinks[i].getPrice());
@@ -144,10 +149,10 @@ public class Main {
 	}
 
 	// 当たりくじの処理
-	public static void lots(Machine drinks[]) {
+	public static void lot(Machine drinks[]) {
 		Scanner scan = new Scanner(System.in);
 
-		if (Machine.lots()) {
+		if (Machine.lot()) {
 			System.out.println("（商品番号を入力してください）");
 			while (true) {
 				int nom = scan.nextInt();
