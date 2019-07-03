@@ -5,9 +5,10 @@ import java.util.Scanner;
 /*
  * 自販機プログラム
  * @TODO 管理者モードの実装（在庫補充、商品追加など）
- * @TODO コードをループするようにする
  * @TODO 投入金額のコイン識別方法の検討（コイン毎の入力にする？）
  * @TODO 最後に買った商品の一覧出力をする、まとめ買い機能
+ * エラーメッセージの定型文化　メソッド化
+ * 重複している部分のメソッド化
  */
 
 public class Main {
@@ -36,7 +37,7 @@ public class Main {
 
 			while (true) {
 				// 商品選択
-				money = choice(money, drinks);
+				money = buy(money, drinks, false);
 
 				// 金額が足りない場合自動で終了
 				if (money < getMinPrice(drinks)) {
@@ -57,7 +58,7 @@ public class Main {
 	// 商品一覧表示
 	public static void printDrink(Machine drinks[]) {
 		for (int i = 0; i < Machine.getItemCount(); i++) {
-			System.out.println(drinks[i].printData());
+			drinks[i].printData();
 		}
 	}
 
@@ -85,16 +86,22 @@ public class Main {
 	}
 
 	// 商品選択＆購入処理
-	public static int choice(int money, Machine drinks[]) {
+	public static int buy(int money, Machine drinks[], boolean lucky) {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("商品番号を入力してください");
 		while (true) {
 			int nom = scan.nextInt();
 			if (nom <= drinks.length) {
-				if ((drinks[nom - 1].getStock() > 0) && (money >= drinks[nom - 1].getPrice())) {
-					money = drinks[nom - 1].buy(money);
-					lot(drinks);
-					break;
+				if ((drinks[nom - 1].getStock() > 0) && (money >= drinks[nom - 1].getPrice() || (lucky))) {
+					if (lucky) {
+						drinks[nom - 1].lucky();
+						break;
+					} else {
+						money = drinks[nom - 1].buy(money);
+						lot(drinks);
+						System.out.println("残りの金額は" + money + "円です");
+						break;
+					}
 				} else if (drinks[nom - 1].getStock() <= 0) {
 					System.out.println("申し訳ありません、現在品切れです。");
 					break;
@@ -106,7 +113,6 @@ public class Main {
 				System.out.println("※商品番号が間違っています。もう一度選んでください。");
 			}
 		}
-		System.out.println("残りの金額は" + money + "円です");
 		return money;
 	}
 
@@ -150,23 +156,8 @@ public class Main {
 
 	// 当たりくじの処理
 	public static void lot(Machine drinks[]) {
-		Scanner scan = new Scanner(System.in);
-
 		if (Machine.lot()) {
-			System.out.println("（商品番号を入力してください）");
-			while (true) {
-				int nom = scan.nextInt();
-				if (nom <= drinks.length) {
-					if (drinks[nom - 1].getStock() > 0) {
-						drinks[nom - 1].lucky();
-						break;
-					} else {
-						System.out.println("※その商品は在庫切れです。別の商品を選んでください。");
-					}
-				} else {
-					System.out.println("※商品番号が間違っています。もう一度選んでください。");
-				}
-			}
+			buy(0, drinks, true);
 		}
 	}
 }

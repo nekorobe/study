@@ -1,5 +1,6 @@
 package jihanki;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /*
@@ -9,12 +10,13 @@ import java.util.Random;
 
 class Machine {
 	private static int itemCount = 0;
-	private static int coinValue[] = { 500, 100, 50, 10 };
-	private static int coinStock[] = { 100, 200, 100, 200 };
+	private final static int coinValue[] = { 500, 100, 50, 10 }; // コイン種別
+	private static int coinStock[] = { 100, 200, 100, 200 }; // コインのストック量
 	private int id;
 	private String name;
 	private int price;
 	private int stock;
+	private static final int hitPerLot = 10; // あたりくじの確立 何本に1本当たる割合か （10なら1/10）
 
 	// コンストラクタ
 	Machine(String name, int price, int stock) {
@@ -46,8 +48,8 @@ class Machine {
 	}
 
 	// 商品情報取得
-	public String printData() {
-		return (this.getId() + " " + this.getName() + " " + this.getPrice() + "円");
+	public void printData() {
+		System.out.printf("%1d %4s  %d円 %n",this.getId(),this.getName(),this.getPrice());
 	}
 
 	// 購入処理
@@ -59,12 +61,9 @@ class Machine {
 	}
 
 	public void lucky() {
-		if (this.stock > 0) {
-			this.stock -= 1;
-			System.out.println(this.name + "を選びました");
-		} else {
-			System.out.println("申し訳ありません、現在品切れです。");
-		}
+		this.stock -= 1;
+		System.out.println(this.name + "を選びました");
+
 	}
 
 	// つり銭の枚数計算処理
@@ -74,49 +73,60 @@ class Machine {
 
 		otsuri = money;
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < coinValue.length; i++) {
 			coinCount[i] = otsuri / coinValue[i];
 			if (i > 1) {
 				if (coinStock[i] < 0) {
 					coinStock[i] = 0;
-					coinCount[i + 1] = +(0 - coinStock[i]) * 10;
+					coinCount[i + 1] += (0 - coinStock[i]) * 10;
 				}
 			}
-			coinStock[i] = -coinCount[i];
+			coinStock[i] -= coinCount[i];
 			otsuri %= coinValue[i];
 		}
 
-		System.out.println(money + "円のお返しで、");
-		System.out.println("500円玉：" + coinCount[0] + "枚");
-		System.out.println("100円玉：" + coinCount[1] + "枚");
-		System.out.println("50円玉　：" + coinCount[2] + "枚");
-		System.out.println("10円玉　：" + coinCount[3] + "枚");
-		System.out.println("です。ご利用ありがとうございました。");
+		System.out.println("おつりは" + money + "円で、");
+		for(int i = 0;i<coinValue.length;i++){
+			String coinName = coinValue[i]+"円玉";
+		System.out.printf("%5s：%-2d枚%n",coinName,coinCount[i]);
+		}
+		System.out.println("のお返しです。ご利用ありがとうございました。");
 		System.out.println("----------------------------");
 		System.out.println("");
 	}
 
 	// 当たりくじ
 	public static boolean lot() {
-
+		boolean lucky;
 		Random rnd = new Random();
-		String[] head = new String[10];
-		String[] foot = new String[10];
-		for (int i = 0; i < 10; i++) {
-			head[i] = "" + i + i + i;
-			foot[i] = "" + i;
+
+		// 抽選部
+		if (rnd.nextInt(hitPerLot) == 0) {
+			lucky = true;
+		} else {
+			lucky = false;
 		}
+
+		// リスト作成
+		ArrayList<String> head = new ArrayList<String>();
+		ArrayList<String> foot = new ArrayList<String>();
+		for (int i = 0; i < 10; i++) {
+			head.add("" + i + i + i);
+			foot.add("" + i);
+		}
+		int lotNom = rnd.nextInt(head.size());
 
 		System.out.println("当たりが出たらもう一本！");
 
-		String lots = head[rnd.nextInt(9)] + foot[rnd.nextInt(9)];
-		System.out.println(lots);
-
-		if (Integer.parseInt(lots) % 1111 == 0) {
+		// 当落に応じた処理
+		if (lucky) {
+			System.out.println(head.get(lotNom) + foot.get(lotNom));
 			System.out.println("大当たり！もう一本選んでネ！");
 			System.out.println("");
 			return true;
 		} else {
+			foot.remove(lotNom);
+			System.out.println(head.get(lotNom) + foot.get(rnd.nextInt(foot.size())));
 			System.out.println("残念、ハズレです。また買ってね！");
 			System.out.println("");
 			return false;
@@ -124,9 +134,9 @@ class Machine {
 	}
 
 	// つり銭切れ表示（現在未使用）
-	public void tsuriGire() {
+	public void otsuriEmpty() {
 		System.out.println("つり銭切れ：");
-		for (int i = 1; i < 3; i++) {
+		for (int i = 1; i < coinValue.length - 1; i++) {
 			if (coinStock[i] <= (coinStock[i] / coinStock[i + 1])) {
 				System.out.println(coinValue[i] + "円玉");
 			}
